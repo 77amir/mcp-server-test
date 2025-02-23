@@ -81,13 +81,25 @@ export async function getToolsFromActions(integrationKey: string): Promise<Tool[
     integrationId: integration.id,
   })
 
+  console.log('\n=== DEBUG: Found Actions ===')
+  console.log('Number of actions:', actions.items.length)
+
   const tools: Tool[] = []
 
   for (const action of actions.items) {
+    console.log('\n=== Action Details ===')
+    console.log('Action Key:', action.key)
+    console.log('Action Name:', action.name)
+    console.log('Action Input Schema:', JSON.stringify(action.inputSchema, null, 2))
+    console.log('=== End Action Details ===\n')
+
     tools.push({
       name: action.key,
       description: action.name,
-      inputSchema: action.inputSchema as any,
+      inputSchema: {
+        ...action.inputSchema,
+        type: 'object' as const
+      },
     })
   }
 
